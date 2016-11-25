@@ -1,0 +1,13 @@
+solr:
+  host: http://localhost:8983/solr
+
+spring:
+  application:
+    name: financial news search engine
+
+server:
+  port: 3000
+
+security:
+  basic:
+    enabled: false
