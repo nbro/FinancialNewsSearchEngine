@@ -1,6 +1,3 @@
-/* ==== Google font ==== */
-@import url('http://fonts.googleapis.com/css?family=Lato:400,300,700,900');
-
 /* GENERAL STYLE */
 
 body {
@@ -12,12 +9,14 @@ body {
     line-height: 1.6em;
     -webkit-font-smoothing: antialiased;
     -webkit-overflow-scrolling: touch;
+    padding-top: 50px;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-    color: #444;
+    color: #666;
 }
 
 h1 {
@@ -25,12 +24,15 @@ h1 {
 }
 
 h3 {
-    font-weight: 400;
+    font-size: 30px;
 }
 
 h4 {
-    font-weight: 400;
     font-size: 20px;
+}
+
+h5 {
+    font-size: 18px;
 }
 
 p {
@@ -43,12 +45,6 @@ p {
 #wrapper {
     text-align: center;
 
-    /*background: url(../img/hot-air-balloon.jpg) no-repeat center top;*/
-
-    background-attachment: relative;
-    background-position: center center;
-
-    box-sizing: border;
     width: 100%;
     -webkit-background-size: 100%;
     -moz-background-size: 100%;
@@ -72,11 +68,6 @@ p {
     font-size: 45px;
     font-weight: 900;
     letter-spacing: -1px;
-}
-
-h2.subtitle {
-    color: #fff;
-    font-size: 24px;
 }
 
 /* footer */
@@ -111,9 +102,26 @@ p.copyright {
     color: black;
 }
 
+.result {
+    border: 0.5px solid #7EC9C6;
+    border: 2px;
+    background-color: #7EC9C6;
+    margin-bottom: 20px;
+
+}
+
 /* FOOTER */
 
-.custom-footer{
+.custom-footer {
     text-align: center;
 }
 
+.custom-footer p {
+    font-size: 12px;
+}
+
+/* HIGHLIGHT COLOR */
+
+.highlightedText {
+    background: yellow;
+}

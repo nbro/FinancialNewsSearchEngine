@@ -26,9 +26,9 @@
 
 </head>
 
-<body ng-app="index">
+<body ng-app="index" ng-controller="search">
 
-<div id="wrapper" ng-controller="search">
+<div id="wrapper">
 
     <div class="container">
 
@@ -36,36 +36,41 @@
 
             <div class="col-sm-12 col-md-12 col-lg-12">
 
-                <h1>Financial News Search Engine</h1>
+                <h1>Financial News SE</h1>
 
-                <!--Benjamin Franklin: Read more at: https://www.brainyquote.com/quotes/topics/topic_finance.html-->
-                <h2 class="subtitle"><i>Beware of little expenses. A small leak will sink a great ship.</i></h2>
+                <!-- https://www.brainyquote.com/quotes/topics/topic_finance.html-->
+                <blockquote style="border: none;">
+                    <h5>
+                        <i id="financialQuote">Beware of little expenses. A small leak will sink a great ship.</i>
+                        <footer><cite id="quoteAuthor">Benjamin Franklin</cite></footer>
+                    </h5>
+                </blockquote>
 
-                <br/>
-                <br/>
-
+                <!--ng-keypress-->
                 <div class="form-group custom-form-group">
                     <input class="form-control input-lg custom-input" type="text" placeholder="Search..."
-                           ng-keypress="callRestSearchService($event)"
+                           ng-keyup="callRestSearchService($event)"
                            ng-model="searchInput">
                 </div>
+
+                <h6 ng-show="results.length">Documents found: {{results.length}}</h6>
 
             </div>
         </div>
 
         <div class="container container-contents">
 
-            <div class="row" ng-repeat="result in results">
+            <div class="row result" ng-repeat="result in results">
 
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <h3>{{result.title}}</h3>
                     <h4><a href="{{result.url}}">{{result.url}}</a></h4>
-                    <p>{{result.content | limitTo: 200}}</p>
+                    <p>{{result.content | limitTo: 300}}
+                        <span ng-if="result.content.length > 300">...</span>
+                    </p>
                 </div>
 
             </div>
-
-            <h2 ng-show="!results.length">...</h2>
 
         </div>
 
@@ -74,8 +79,8 @@
 </div>
 
 <!--navbar-fixed-bottom makes the footer stick to the bottom!-->
-<div class="footer navbar-fixed-bottom custom-footer">
-    <p class="copyright">Copyright &copy; 2016, Financial News SE</p>
+<div class="footer navbar-fixed-bottom custom-footer" ng-if="results.length == 0">
+    <p class="copyright"><i>Copyright &copy; 2016, Financial News SE</i></p>
 </div>
 
 <!-- JAVASCRIPT -->
