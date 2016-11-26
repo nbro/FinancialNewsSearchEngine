@@ -1,28 +1,88 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+
+    <!-- based on: http://www.scoopthemes.com/templates/Coming-Soon-Template/ -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>Financial News Search Engine</title>
+
+    <link rel="shortcut icon" href="img/logo.png">
+
+    <!-- CSS -->
     <link href="css/angular-bootstrap.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- angular related styles -->
     <style type="text/css">
+
         [ng\:cloak], [ng-cloak], .ng-cloak {
             display: none !important;
         }
+
     </style>
+
 </head>
 
-<body ng-app="hello">
-<div class="container">
+<body ng-app="index">
 
-    <h1>Financial News Search Engine</h1>
+<div id="wrapper" ng-controller="search">
 
-    <div ng-controller="home as home" ng-cloak class="ng-cloak">
-        <p>The ID is {{home.greeting.id}}</p>
-        <p>The content is {{home.greeting.content}}</p>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                <h1>Financial News Search Engine</h1>
+
+                <!--Benjamin Franklin: Read more at: https://www.brainyquote.com/quotes/topics/topic_finance.html-->
+                <h2 class="subtitle"><i>Beware of little expenses. A small leak will sink a great ship.</i></h2>
+
+                <br/>
+                <br/>
+
+                <div class="form-group custom-form-group">
+                    <input class="form-control input-lg custom-input" type="text" placeholder="Search..."
+                           ng-keypress="callRestSearchService($event)"
+                           ng-model="searchInput">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container container-contents">
+
+            <div class="row" ng-repeat="result in results">
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <h3>{{result.title}}</h3>
+                    <h4><a href="{{result.url}}">{{result.url}}</a></h4>
+                    <p>{{result.content | limitTo: 200}}</p>
+                </div>
+
+            </div>
+
+            <h2 ng-show="!results.length">...</h2>
+
+        </div>
+
+
     </div>
 </div>
 
+<!--navbar-fixed-bottom makes the footer stick to the bottom!-->
+<div class="footer navbar-fixed-bottom custom-footer">
+    <p class="copyright">Copyright &copy; 2016, Financial News SE</p>
+</div>
+
+<!-- JAVASCRIPT -->
 <script src="js/angular-bootstrap.js" type="text/javascript"></script>
-<script src="js/hello.js"></script>
+<script src="js/controller.js"></script>
+<script src="js/main.js"></script>
+
 </body>
 
 </html>

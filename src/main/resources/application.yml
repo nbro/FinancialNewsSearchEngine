@@ -1,13 +1,17 @@
-solr:
-  host: http://localhost:8983/solr
-
 spring:
   application:
     name: financial news search engine
 
 server:
-  port: 3000
+  port: 8443
+#  ssl:
+#    key-store: classpath:KeyStore.jks
+#    key-store-password: fnse1234
+#    key-password: fnse1234
 
 security:
   basic:
     enabled: false
+
+solr:
+  host: http://localhost:8983/solr

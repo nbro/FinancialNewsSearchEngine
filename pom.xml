@@ -52,6 +52,20 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- SPRING SOLR
+         provides SPRING DATA SOLR and SOLRJ
+         spring-data-solr should be 1.1.0.RELEASE?
+         -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-solr</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-core</artifactId>
+        </dependency>
+
         <!-- ANGULAR JS -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -67,20 +81,10 @@
             <version>2.0.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>ro.isdc.wro4j</groupId>
-            <artifactId>wro4j-core</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-
-        <!-- SPRING SOLR
-         provides SPRING DATA SOLR and SOLRJ
-         spring-data-solr should be 1.1.0.RELEASE?
-         -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-solr</artifactId>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-core</artifactId>
+            <version>6.3.0</version>
         </dependency>
 
     </dependencies>
@@ -98,6 +102,7 @@
                 <groupId>ro.isdc.wro4j</groupId>
                 <artifactId>wro4j-maven-plugin</artifactId>
                 <version>1.8.0</version>
+
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
@@ -115,8 +120,8 @@
                     <jsDestinationFolder>${project.build.directory}/classes/static/js</jsDestinationFolder>
 
                     <!-- WRO -->
-                    <wroFile>${basedir}/src/main/wro/wro.xml</wroFile>
-                    <extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
+                    <wroFile>src/main/wro/wro.xml</wroFile>
+                    <extraConfigFile>src/main/wro/wro.properties</extraConfigFile>
                     <contextFolder>${basedir}/src/main/wro</contextFolder>
 
                 </configuration>
@@ -138,7 +143,7 @@
                     <dependency>
                         <groupId>org.webjars</groupId>
                         <artifactId>bootstrap</artifactId>
-                        <version>3.3.7</version>
+                        <version>3.3.7-1</version>
                     </dependency>
 
                 </dependencies>
