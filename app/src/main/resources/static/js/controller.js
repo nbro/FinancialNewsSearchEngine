@@ -38,6 +38,10 @@ app.controller('search', ["$scope", "$http", "$sce", "$timeout", function ($scop
 
     switchQuote();
 
+    $scope.renderHtml = function (html_code) {
+        return $sce.trustAsHtml(html_code);
+    };
+
     // source: http://stackoverflow.com/questions/15519713/highlighting-a-filtered-result-in-angularjs
 
     $scope.callRestSearchService = function (keyEvent) {
@@ -47,14 +51,18 @@ app.controller('search', ["$scope", "$http", "$sce", "$timeout", function ($scop
          return;
          } */
 
-        var dataObj = {
-            searchInput: $scope.searchInput
+        var bodyData = {
+            query: $scope.query
         };
 
-        var res = $http.post("/search", dataObj);
+        var res = $http.post("/search", bodyData);
 
         res.success(function (data, status, headers, config) {
-            $scope.results = data;
+            if (data == null) {
+                $scope.highlightPages = [];
+            } else {
+                $scope.highlightPages = data;
+            }
         });
 
         res.error(function (data, status, headers, config) {

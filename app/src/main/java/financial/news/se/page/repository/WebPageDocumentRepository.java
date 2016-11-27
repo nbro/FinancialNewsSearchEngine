@@ -1,10 +1,11 @@
 package financial.news.se.page.repository;
 
 import financial.news.se.page.model.WebPageDocument;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.query.result.HighlightPage;
+import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Created by Nelson on 26.11.16.
@@ -12,39 +13,20 @@ import java.util.List;
 @Repository
 public interface WebPageDocumentRepository extends SolrCrudRepository<WebPageDocument, String> {
 
-    List<WebPageDocument> findByIdOrUrlOrTitleOrContentContaining(String id, String url, String title, String content);
+    @Highlight(prefix = "<mark>", postfix = "</mark>")
+    HighlightPage<WebPageDocument> findByIdOrTitleOrContentContainingIgnoreCase(String id, String title, String content, Pageable pageable);
 
-    List<WebPageDocument> findByBoost(Float boost);
+    @Highlight(prefix = "<mark>", postfix = "</mark>")
+    HighlightPage<WebPageDocument> findByContentContainingIgnoreCase(String string, Pageable pageable);
 
-    List<WebPageDocument> findByUrl(String url);
+    @Highlight(prefix = "<mark>", postfix = "</mark>")
+    HighlightPage<WebPageDocument> findByTitleContainingIgnoreCase(String string, Pageable pageable);
 
-    List<WebPageDocument> findByContent(String content);
+    @Highlight(prefix = "<mark>", postfix = "</mark>")
+    HighlightPage<WebPageDocument> findByAnchor(String anchors, Pageable pageable);
 
-    List<WebPageDocument> findByTitle(String title);
-
-    List<WebPageDocument> findByAnchor(List<String> anchors);
-
-    List<WebPageDocument> findByType(List<String> types);
-
-    List<WebPageDocument> findByDate(String date);
-
-    List<WebPageDocument> findByMeta(List<String> meta);
-
-    List<WebPageDocument> findByLang(String lang);
-
-    List<WebPageDocument> findBySubCollection(List<String> subCollection);
-
-    List<WebPageDocument> findByAuthor(String author);
-
-    List<WebPageDocument> findByTag(List<String> tags);
-
-    List<WebPageDocument> findByFeed(String feed);
-
-    List<WebPageDocument> findByPublishedDate(String publishedDate);
-
-    List<WebPageDocument> findByUpdatedDate(String updatedDate);
-
-    List<WebPageDocument> findByCc(List<String> cc);
+    @Highlight(prefix = "<mark>", postfix = "</mark>")
+    HighlightPage<WebPageDocument> findByType(String type, Pageable pageable);
 
 }
 

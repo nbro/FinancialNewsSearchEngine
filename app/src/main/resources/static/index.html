@@ -50,24 +50,40 @@
                 <div class="form-group custom-form-group">
                     <input class="form-control input-lg custom-input" type="text" placeholder="Search..."
                            ng-keyup="callRestSearchService($event)"
-                           ng-model="searchInput">
+                           ng-model="query">
                 </div>
 
-                <h6 ng-show="results.length">Documents found: {{results.length}}</h6>
+                <h6 ng-if="highlightPages.content.length > 0">Documents found:
+                    <span>{{highlightPages.content.length}}</span></h6>
 
             </div>
         </div>
 
         <div class="container container-contents">
 
-            <div class="row result" ng-repeat="result in results">
+            <!--data["highlighted"]["0"]["highlights"]-->
+            <div class="row result" ng-repeat="e in highlightPages.content">
 
                 <div class="col-sm-12 col-md-12 col-lg-12">
-                    <h3>{{result.title}}</h3>
-                    <h4><a href="{{result.url}}">{{result.url}}</a></h4>
-                    <p>{{result.content | limitTo: 300}}
-                        <span ng-if="result.content.length > 300">...</span>
-                    </p>
+
+                    <h3 ng-if="e.title.length > 0">{{e.title[0]}}</h3>
+
+                    <h6><a href="{{e.url}}">{{e.url}}</a></h6>
+
+                    <div class="row" ng-repeat="h in highlightPages.highlighted[$index].highlights">
+
+                        <div class="col-sm-12 col-md-12 col-lg-12" ng-if="h.field.name == 'content'">
+
+                            <div class="row" ng-repeat="snipplet in h.snipplets">
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <p ng-bind-html="renderHtml(snipplet)"></p><br>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
@@ -79,7 +95,7 @@
 </div>
 
 <!--navbar-fixed-bottom makes the footer stick to the bottom!-->
-<div class="footer navbar-fixed-bottom custom-footer" ng-if="results.length == 0">
+<div class="footer navbar-fixed-bottom custom-footer" ng-if="highlightPages.length == 0">
     <p class="copyright"><i>Copyright &copy; 2016, Financial News SE</i></p>
 </div>
 
