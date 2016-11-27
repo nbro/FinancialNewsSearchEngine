@@ -16,7 +16,7 @@ These are tutorials that I encourage you to follow before proceeding with the ne
 
 - [https://wiki.apache.org/nutch/Nutch2Tutorial](https://wiki.apache.org/nutch/Nutch2Tutorial) (for Nutch 2.X)
 
-After following this tutorial, we may encounter a problem when injecting the seeds URLs, which I solved using: [http://stackoverflow.com/questions/16401667/java-lang-classnotfoundexception-org-apache-gora-hbase-store-hbasestore](http://stackoverflow.com/questions/16401667/java-lang-classnotfoundexception-org-apache-gora-hbase-store-hbasestore)
+ After following this tutorial, we may encounter a problem when injecting the seeds URLs, which I solved using: [http://stackoverflow.com/questions/16401667/java-lang-classnotfoundexception-org-apache-gora-hbase-store-hbasestore](http://stackoverflow.com/questions/16401667/java-lang-classnotfoundexception-org-apache-gora-hbase-store-hbasestore)
 
 
 - [http://hbase.apache.org/book.html#quickstart](http://hbase.apache.org/book.html#quickstart)
@@ -26,18 +26,18 @@ After following this tutorial, we may encounter a problem when injecting the see
 
 ### Nutch, HBase and Solr 
 
-If you have already replaced the files I've mentioned in the previous section, then, in theory, you're able to build nutch from the source code. Before that, make sure you have [`ant`](http://ant.apache.org/) installed on your operating system. If you're on a Mac OS X and you have `Homebrew` installed, you can simply do `brew install ant`.
+If you have already replaced the files I've mentioned in the section "configuration", then, in theory, you're able to build nutch from the source code. Before that, make sure you have [`ant`](http://ant.apache.org/) installed on your operating system. If you're on a Mac OS X and you have `Homebrew` installed, you can simply do `brew install ant`.
 
 Once you have `ant` installed, you can build nutch with the following commands:
 
     ant clean
     ant runtime
     
-This should take less than 10 minutes. Once that's finished, you need to start `hbase`. Enter inside the folder [`hbase-0.98.8-hadoop2`](hbase-0.98.8-hadoop2) and type:
+This should take less than 10 minutes. Once that's finished, you need to start `hbase`. Enter inside the folder `hbase-0.98.8-hadoop2` and type:
 
     bin/start-hbase.sh
 
-Once that's done, you should also start the search platform `solr`. To do that, go inside the folder `solr-4.10.3` (make sure that you have its subfolder `solr-4.10.3/financial-news-se`) and type the following:
+Once that's done, you should also start the search platform `solr`. To do that, go inside the folder you downloaded and unzipped `solr-4.10.3` (make sure that you have its subfolder `solr-4.10.3/financial-news-se`) and type the following:
 
     bin/solr start -c -dir financial-news-se
     
@@ -46,7 +46,7 @@ You should see a message similar to:
 >Waiting to see Solr listening on port 8983 [/]  
 Started Solr server on port 8983 (pid=38649). Happy searching!
 
-Afterthat you can finally crawl data and inject it into the database. To do it, run the following commands in order:
+After that you can finally _crawl_ data (starting from the seeds/URLs that you should have copied to the nutch folder) and _inject_ it into the database. To do it, run the following commands in order:
 
 
     runtime/local/bin/nutch inject seeds
@@ -67,7 +67,7 @@ Once that's finished, you can pass the crawled that to Solr to be indexed with t
 
     runtime/local/bin/nutch solrindex http://localhost:8983/solr -all
 
-After all this steps, if you haven't encountered any problems, you can go to the next section and run the web app!
+After all these steps, if you haven't encountered any problems, you can go to the next section and run the web app!
 
 
 ### Web app
