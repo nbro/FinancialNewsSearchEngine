@@ -1,7 +1,7 @@
 package financial.news.se.controller;
 
-import financial.news.se.page.model.SitePageDocument;
-import financial.news.se.page.repository.SitePageDocumentRepository;
+import financial.news.se.page.model.WebPageDocument;
+import financial.news.se.page.repository.WebPageDocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +17,11 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    SitePageDocumentRepository repository;
+    WebPageDocumentRepository repository;
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public List<SitePageDocument> search(@RequestBody String searchInput) {
+    public List<WebPageDocument> search(@RequestBody String searchInput) {
+
         System.out.println("Query: " + searchInput + "\n");
         System.out.println(repository.findByIdOrUrlOrTitleOrContentContaining(searchInput, searchInput, searchInput, searchInput));
 
