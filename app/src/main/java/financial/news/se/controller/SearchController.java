@@ -21,12 +21,11 @@ public class SearchController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public List<SitePageDocument> search(@RequestBody String searchInput) {
+        System.out.println("Query: " + searchInput + "\n");
+        System.out.println(repository.findByIdOrUrlOrTitleOrContentContaining(searchInput, searchInput, searchInput, searchInput));
 
-        System.out.println(repository.findByContent(searchInput));
-
-        return repository.findByContent(searchInput);
+        return repository.findByIdOrUrlOrTitleOrContentContaining(searchInput, searchInput, searchInput, searchInput);
 
     }
-
 
 }

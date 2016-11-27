@@ -1,7 +1,6 @@
 package financial.news.se.page.repository;
 
 import financial.news.se.page.model.SitePageDocument;
-import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,11 +12,7 @@ import java.util.List;
 @Repository
 public interface SitePageDocumentRepository extends SolrCrudRepository<SitePageDocument, String> {
 
-    @Highlight(prefix = "<b>", postfix = "</b>")
-    List<SitePageDocument> findByContent(String content);
-
-    List<SitePageDocument> findByUrl(String url);
-
+    List<SitePageDocument> findByIdOrUrlOrTitleOrContentContaining(String id, String url, String title, String content);
 
 }
 

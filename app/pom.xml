@@ -24,8 +24,9 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <!-- DEPENDENCIES -->
     <dependencies>
-
+    
         <!-- SPRING SECURITY -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,9 +77,11 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
 
+    <build>
+
+        <!-- PLUGINS -->
+        <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -136,8 +139,7 @@
                 </dependencies>
 
             </plugin>
-
-
+            
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>

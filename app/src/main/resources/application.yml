@@ -3,7 +3,7 @@ spring:
     name: financial news search engine
 
 server:
-  port: 8443
+  port: 3000
 
 security:
   basic:
