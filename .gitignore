@@ -1,5 +1,6 @@
-apache-nutch-2.3.1/
-hbase-0.98.8-hadoop2/
-solr-4.10.3/
+/apache-nutch-2.3.1
+/hbase-0.98.8-hadoop2
+/solr-4.10.3
+
 .idea/
 COMMANDS.md

@@ -10,12 +10,9 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import java.util.List;
 
-import static com.sun.tools.doclint.Entity.lang;
-
 /*
 * Non-indexed and non-stored fields are not specified.
 * */
-
 @SolrDocument(solrCoreName = "collection1")
 public class WebPageDocument {
 
@@ -50,18 +47,6 @@ public class WebPageDocument {
 
 
     /* GETTERS AND SETTERS */
-
-    @Override
-    public String toString() {
-        return "WebPageDocument{" +
-                "id='" + id + '\'' +
-                ",\ncontent='" + content + '\'' +
-                ",\ntitle=" + title +
-                ",\nanchor=" + anchor +
-                ",\ntype=" + type +
-                ",\nlang='" + lang + '\'' +
-                "\n\n";
-    }
 
     public String getId() {
         return id;
@@ -111,5 +96,15 @@ public class WebPageDocument {
         this.type = type;
     }
 
-
+    @Override
+    public String toString() {
+        return "WebPageDocument{" +
+                "id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", content='" + content + '\'' +
+                ", title=" + title +
+                ", anchor=" + anchor +
+                ", type=" + type +
+                "}\n";
+    }
 }
