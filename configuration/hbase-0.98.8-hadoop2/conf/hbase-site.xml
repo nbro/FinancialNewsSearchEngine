@@ -22,16 +22,15 @@
 -->
 <configuration>
 
-<!-- ADDED BY NELSON -->
-<configuration>
-  <property>
-    <name>hbase.rootdir</name>
-    <value>../runtime/hbase</value>
-  </property>
-  <property>
-    <name>hbase.zookeeper.property.dataDir</name>
-    <value>../runtime/zookeeper</value>
-  </property>
-</configuration>
+    <!-- ADDED BY NELSON!!! -->
+      <property>
+        <name>hbase.rootdir</name>
+        <value>runtime/hbase</value>
+      </property>
+      
+      <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>runtime/zookeeper</value>
+      </property>
 
 </configuration>

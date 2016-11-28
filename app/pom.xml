@@ -53,10 +53,11 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- SPRING SOLR: SPRING DATA SOLR and SOLRJ -->
+        <!-- SPRING SOLR  -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-solr</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+            <version>2.0.5.RELEASE</version>
         </dependency>
 
         <!-- ANGULAR JS -->

@@ -318,7 +318,6 @@
     <!-- fields for index-basic plugin -->
     <field name="host" type="url" stored="false" indexed="true"/>
     <field name="url" type="url" stored="true" indexed="true"/>
-    
     <!-- stored=true for highlighting, use term vectors  and positions for fast highlighting -->
     <field name="content" type="text_general" stored="true" indexed="true"/>
     <field name="title" type="text_general" stored="true" indexed="true" multiValued="true"/>
@@ -338,9 +337,8 @@
     <field name="lastModified" type="date" stored="true" indexed="false"/>
     <field name="date" type="tdate" stored="true" indexed="true"/>
     
-    <!-- MODIFIED BY NELSON!!!!!! -->
     <!-- fields for index-metadata plugin -->  
-    <dynamicField name="meta_*" type="string" stored="true" indexed="true" multiValued="true"/>
+    <dynamicField name="meta_*" type="string" stored="true" indexed="true"/>
 
     <!-- fields for languageidentifier plugin -->
     <field name="lang" type="string" stored="true" indexed="true"/>

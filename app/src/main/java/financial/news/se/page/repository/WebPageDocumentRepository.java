@@ -7,6 +7,8 @@ import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by Nelson on 26.11.16.
  */
@@ -14,20 +16,10 @@ import org.springframework.stereotype.Repository;
 public interface WebPageDocumentRepository extends SolrCrudRepository<WebPageDocument, String> {
 
     @Highlight(prefix = "<mark>", postfix = "</mark>")
-    HighlightPage<WebPageDocument> findByIdOrTitleOrContentContainingIgnoreCase(String id, String title, String content, Pageable pageable);
+    HighlightPage<WebPageDocument> findByContentContainingIgnoreCase(List<String> query, Pageable pageable);
 
     @Highlight(prefix = "<mark>", postfix = "</mark>")
-    HighlightPage<WebPageDocument> findByContentContainingIgnoreCase(String string, Pageable pageable);
-
-    @Highlight(prefix = "<mark>", postfix = "</mark>")
-    HighlightPage<WebPageDocument> findByTitleContainingIgnoreCase(String string, Pageable pageable);
-
-    @Highlight(prefix = "<mark>", postfix = "</mark>")
-    HighlightPage<WebPageDocument> findByAnchor(String anchors, Pageable pageable);
-
-    @Highlight(prefix = "<mark>", postfix = "</mark>")
-    HighlightPage<WebPageDocument> findByType(String type, Pageable pageable);
-
+    HighlightPage<WebPageDocument> findByTitleContainingIgnoreCase(List<String> query, Pageable pageable);
 }
 
 
