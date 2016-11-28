@@ -47,13 +47,13 @@ configuration_exists() {
 }
 
 
-stop_tor{
+stop_tor(){
 	printf "${YELLOW}stopping tor network...${NORMAL}\n";
 	sudo pkill -f tor	
 }
 
 
-start_tor {
+start_tor() {
 	stop_tor
 	printf "${YELLOW}starting tor network...${NORMAL}\n";
 	echo -ne '\n' | tor &	
@@ -147,6 +147,9 @@ solr() {
 		exit 1;
 	fi
 
+	bin/solr stop
+	sudo pkill *solr*
+
 	bin/solr start -c -dir example
 
 	cd ..
@@ -210,6 +213,9 @@ hbase() {
 		printf "${RED}'File 'bin/start-hbase.sh' should exist!${NORMAL}\n";
 		exit 1;
 	fi
+
+	bin/stop-hbase.sh
+	sudo pkill *hbase*
 
 	bin/start-hbase.sh
 
