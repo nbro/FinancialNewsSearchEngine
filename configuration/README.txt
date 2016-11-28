@@ -1,0 +1,1 @@
+You should not modify any files (but eventually "apache-nutch-2.3.1/seeds/financial-news") if you don't know what you're doing!
