@@ -60,16 +60,16 @@ After that you can finally _crawl_ data (starting from the seeds/URLs that you s
 
 3. Downloads the documents corresponding to the selected URLs
 
-    runtime/local/bin/nutch fetch -all
+        runtime/local/bin/nutch fetch -all
 
 
 4. Parses the downloaded documents
 
-    runtime/local/bin/nutch parse -all
+        runtime/local/bin/nutch parse -all
 
 5. Updates the database with the new parsed documents
 
-    runtime/local/bin/nutch updatedb -all
+        runtime/local/bin/nutch updatedb -all
 
 
 Once that's finished, you can pass the crawled that to Solr to be indexed with the following command:
