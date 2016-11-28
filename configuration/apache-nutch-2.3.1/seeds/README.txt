@@ -1,1 +1,0 @@
-Add eventually other seeds (or initial URLS) to the file "financial-news".
