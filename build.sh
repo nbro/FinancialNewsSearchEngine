@@ -10,57 +10,73 @@ YELLOW=$(tput setaf 3)
 
 
 programs_required_exist() {
+	printf "${YELLOW}checking existance of ${RED}required${YELLOW} programs:\n\t mvn,\n\t ant,\n\t wget,\n\t tar,\n\t unzip,\n\t tor,\n\t torsocks, and\n\t pkill${NORMAL}\n"
 	command -v mvn >/dev/null 2>&1 || { echo >&2 "'maven' not installed. please, install it before proceeding."; exit 1; }
+	command -v ant >/dev/null 2>&1 || { echo >&2 "'ant' not installed. please, install it before proceeding."; exit 1; }
 	command -v wget >/dev/null 2>&1 || { echo >&2 "'wget' not installed. please, install it before proceeding."; exit 1; }
 	command -v tar >/dev/null 2>&1 || { echo >&2 "'tar' not installed. please, install it before proceeding."; exit 1; }
 	command -v unzip >/dev/null 2>&1 || { echo >&2 "'unzip' not installed. please, install it before proceeding."; exit 1; }
 	command -v tor >/dev/null 2>&1 || { echo >&2 "'tor' not installed. please, install it before proceeding."; exit 1; }
 	command -v torsocks >/dev/null 2>&1 || { echo >&2 "'torsocks' not installed. please, install it before proceeding."; exit 1; }
 	command -v pkill >/dev/null 2>&1 || { echo >&2 "'pkill' not installed. please, install it before proceeding."; exit 1; }
+	printf "${GREEN}ok.${NORMAL}\n\n";
 }
 
 
 configuration_exists() {
 	printf "${YELLOW}checking existance of configuration directories...${NORMAL}\n"
 
-	if [ ! -d "configuration/apache-nutch-2.3.1/conf" ]; then
-		printf "${RED}'Directory 'configuration/apache-nutch-2.3.1/conf' should exist with 3 files!${NORMAL}\n";
+	if [ ! -f "configuration/apache-nutch-2.3.1/conf/gora.properties" ]; then
+		printf "${RED}'File 'configuration/apache-nutch-2.3.1/conf/gora.properties' should exist!${NORMAL}\n";
 		exit 1;
 	fi
 
-	if [ ! -d "configuration/apache-nutch-2.3.1/ivy" ]; then
-		printf "${RED}'Directory 'configuration/apache-nutch-2.3.1/ivy' should exist with 1 file!${NORMAL}\n";
+	if [ ! -f "configuration/apache-nutch-2.3.1/conf/nutch-site.xml" ]; then
+		printf "${RED}'File 'configuration/apache-nutch-2.3.1/conf/nutch-site.xml' should exist!${NORMAL}\n";
 		exit 1;
 	fi
 
-	if [ ! -d "configuration/apache-nutch-2.3.1/seeds" ]; then
-		printf "${RED}'Directory 'configuration/apache-nutch-2.3.1/seeds' should exist with 1 file!${NORMAL}\n";
+	if [ ! -f "configuration/apache-nutch-2.3.1/conf/schema.xml" ]; then
+		printf "${RED}'File 'configuration/apache-nutch-2.3.1/conf/schema.xml' should exist!${NORMAL}\n";
 		exit 1;
 	fi
 
-	if [ ! -d "configuration/hbase-0.98.8-hadoop2/conf" ]; then
-		printf "${RED}Directory 'configuration/hbase-0.98.8-hadoop2/conf' should exist with 1 file!${NORMAL}\n";
+	if [ ! -f "configuration/apache-nutch-2.3.1/ivy/ivy.xml" ]; then
+		printf "${RED}'File 'configuration/apache-nutch-2.3.1/ivy/ivy.xml' should exist!${NORMAL}\n";
 		exit 1;
 	fi
 
-	printf "${GREEN}ok. ${RED}note that this only checked the existance of the directories not the specific required files.${NORMAL}\n\n";
+	if [ ! -f "configuration/apache-nutch-2.3.1/seeds/financial-news" ]; then
+		printf "${RED}'File 'configuration/apache-nutch-2.3.1/seeds/financial-news' should exist!${NORMAL}\n";
+		exit 1;
+	fi
+
+	if [ ! -f "configuration/hbase-0.98.8-hadoop2/conf/hbase-site.xml" ]; then
+		printf "${RED}File 'configuration/hbase-0.98.8-hadoop2/conf/hbase-site.xml' should exist!${NORMAL}\n";
+		exit 1;
+	fi
+
+	printf "${GREEN}ok.${NORMAL}\n\n";
 }
 
 
 stop_tor(){
 	printf "${YELLOW}stopping tor network...${NORMAL}\n";
-	sudo pkill -f tor	
+	sudo pkill -f tor
 }
 
 
 start_tor() {
 	stop_tor
-	printf "${YELLOW}starting tor network...${NORMAL}\n";
-	echo -ne '\n' | tor &	
+	printf "${YELLOW}we're going to start the tor network to download the files.\nsince we're going to use tor, the download is likely to be slower than without it.\n${NORMAL}";
+	# http://tor.stackexchange.com/q/13244/13574
+	tor --runasdaemon 1
 }
 
 
 can_download() {
+	start_tor
+
 	printf "${YELLOW}checking if programs to download are available...${NORMAL}\n";
 
 	torify wget -q --spider http://www.pirbot.com/mirrors/apache/nutch/2.3.1/apache-nutch-2.3.1-src.tar.gz
@@ -101,7 +117,7 @@ download() {
 	
 	stop_tor
 
-	printf "${GREEN}done.${NORMAL}\n"
+	printf "${GREEN}done.${NORMAL}\n\n"
 }
 
 
@@ -139,88 +155,95 @@ configure() {
 
 
 solr() {
-	printf "${YELLOW}starting solr...${NORMAL}\n";
-	cd solr-4.10.3
+	if [ ! -f "solr-4.10.3/bin/solr" ]; then
+		printf "${RED}'File 'solr-4.10.3/bin/solr' should exist!${NORMAL}\n";
+	else
+		printf "${YELLOW}starting solr...${NORMAL}\n";
 
-	if [ ! -f "bin/solr" ]; then
-		printf "${RED}'File 'bin/solr' should exist!${NORMAL}\n";
-		exit 1;
+		cd solr-4.10.3
+		bin/solr stop
+		sudo pkill *solr*
+
+		bin/solr start -c -dir example
+
+		cd ..
+		printf "${GREEN}done.${NORMAL}\n\n";
 	fi
-
-	bin/solr stop
-	sudo pkill *solr*
-
-	bin/solr start -c -dir example
-
-	cd ..
-	printf "${GREEN}done.${NORMAL}\n\n";
 }
 
 
 nutch() {
-	printf "${YELLOW}starting nutch...${NORMAL}\n";
+	if [ ! -d "apache-nutch-2.3.1" ]; then
+		printf "${RED}'Directory 'apache-nutch-2.3.1' should exist!${NORMAL}\n";
+	else
+		printf "${YELLOW}starting nutch...${NORMAL}\n";
+	
+		cd apache-nutch-2.3.1
 
-	command -v ant >/dev/null 2>&1 || { echo >&2 "'ant' not installed. please, install it before proceeding."; exit 1; }
+		# these 2 commands should be run only when the configurations file have been replaced
+		printf "${YELLOW}building nutch...${NORMAL}\n";
+		ant clean
+		ant runtime
+		printf "${GREEN}done.${NORMAL}\n\n";
 
-	cd apache-nutch-2.3.1
+		# fatal error: some files/configurations somewhere else where probably modified!
+		if [ ! -f "runtime/local/bin/nutch" ]; then
+			printf "${RED}'File 'runtime/local/bin/nutch' should exist!${NORMAL}\n";
+		else
+			printf "${YELLOW}injecting seeds...${NORMAL}\n";
+			# trun the following 6 commands only after HBase is running
+			runtime/local/bin/nutch inject seeds
+			printf "${GREEN}done.${NORMAL}\n\n";
 
-	# these 2 commands should be run only when the configurations file have been replaced
-	printf "${YELLOW}building nutch...${NORMAL}\n";
-	ant clean
-	ant runtime
-	printf "${GREEN}done.${NORMAL}\n\n";
+			# change number after -topN depending on your needs
+			printf "${YELLOW}generating top 1000...${NORMAL}\n"; 
+			runtime/local/bin/nutch generate -topN 1000
+			printf "${GREEN}done.${NORMAL}\n\n";
 
-	if [ ! -f "runtime/local/bin/nutch" ]; then
-		printf "${RED}'File 'runtime/local/bin/nutch' should exist!${NORMAL}\n";
-		exit 1;
+			printf "${YELLOW}fetching all webdocuments...${NORMAL}\n";
+			runtime/local/bin/nutch fetch -all
+			printf "${GREEN}done.${NORMAL}\n\n";
+
+			printf "${YELLOW}parsing all fetched webdocuments...${NORMAL}\n";
+			runtime/local/bin/nutch parse -all
+			printf "${GREEN}done.${NORMAL}\n\n";
+
+			printf "${YELLOW}updating database all...${NORMAL}\n";
+			runtime/local/bin/nutch updatedb -all
+			printf "${GREEN}done.${NORMAL}\n\n";
+
+			printf "${YELLOW}runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all${NORMAL}\n";
+			runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all	
+			printf "${GREEN}done.${NORMAL}\n\n";
+
+			printf "${GREEN}done.${NORMAL}\n\n";			
+		fi
+
+		cd ..
+
 	fi
-
-	printf "${YELLOW}injecting seeds...${NORMAL}\n";
-	# trun the following 6 commands only after HBase is running
-	runtime/local/bin/nutch inject seeds
-	printf "${GREEN}done.${NORMAL}\n\n";
-
-	printf "${YELLOW}generating top 1000...${NORMAL}\n";  # -topN 100000
-	runtime/local/bin/nutch generate -topN 1000
-	printf "${GREEN}done.${NORMAL}\n\n";
-
-	printf "${YELLOW}fetching all webdocuments...${NORMAL}\n";
-	runtime/local/bin/nutch fetch -all
-	printf "${GREEN}done.${NORMAL}\n\n";
-
-	printf "${YELLOW}parsing all fetched webdocuments...${NORMAL}\n";
-	runtime/local/bin/nutch parse -all
-	printf "${GREEN}done.${NORMAL}\n\n";
-
-	printf "${YELLOW}updating database all...${NORMAL}\n";
-	runtime/local/bin/nutch updatedb -all
-	printf "${GREEN}done.${NORMAL}\n\n";
-
-	printf "${YELLOW}runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all${NORMAL}\n";
-	runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all	
-	printf "${GREEN}done.${NORMAL}\n\n";
-
-	cd ..
-	printf "${GREEN}done.${NORMAL}\n\n";
 }
 
 
 hbase() {
-	printf "${YELLOW}starting hbase...${NORMAL}\n";
-	cd hbase-0.98.8-hadoop2
+	if [ ! -d "hbase-0.98.8-hadoop2" ]; then
+		printf "${RED}'Directory 'hbase-0.98.8-hadoop2' should exist!${NORMAL}\n";
+	else
+		cd hbase-0.98.8-hadoop2
 
-	if [ ! -f "bin/start-hbase.sh" ]; then
-		printf "${RED}'File 'bin/start-hbase.sh' should exist!${NORMAL}\n";
-		exit 1;
+		printf "${YELLOW}starting hbase...${NORMAL}\n";
+
+		if [ ! -f "bin/start-hbase.sh" ]; then
+			printf "${RED}'File 'bin/start-hbase.sh' should exist!${NORMAL}\n";			
+		else
+			bin/stop-hbase.sh
+			sudo pkill /hbase/
+			bin/start-hbase.sh
+			printf "${GREEN}done.${NORMAL}\n\n";
+		fi
+
+		cd ..
 	fi
-
-	bin/stop-hbase.sh
-	sudo pkill *hbase*
-
-	bin/start-hbase.sh
-
-	cd ..
-	printf "${GREEN}done.${NORMAL}\n\n";
 }
 
 run_webapp() {
