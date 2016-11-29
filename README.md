@@ -30,7 +30,7 @@ Notice that you may have already some of these programs installed on your system
 
 If you're on a Mac OS X, you can install most of these programs using for example the package manager _Homebrew_. On Linux the package manager may be different but the process should be the same.
 
-_I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections *configuration* and *commands*. This script is still not robuts but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000) You can run the script as follows:_
+_I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections "configuration" and "commands". This script is still not robuts but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000) You can run the script as follows:_
 
     source ./build.sh
     start

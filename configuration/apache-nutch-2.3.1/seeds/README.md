@@ -1,1 +1,0 @@
-Add eventually other seeds (or initial URLs) to the file [`financial-news`](./financial-news).
