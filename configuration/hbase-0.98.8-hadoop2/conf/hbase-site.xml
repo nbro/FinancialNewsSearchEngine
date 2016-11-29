@@ -22,12 +22,14 @@
 -->
 <configuration>
 
-    <!-- ADDED BY NELSON!!! -->
+      <!-- specifying the home folder for the hbase database.
+      this runtime/hbase is relative to the home folder of hbase-0.98.8-hadoop2 -->
       <property>
         <name>hbase.rootdir</name>
         <value>runtime/hbase</value>
       </property>
       
+      <!-- specifying the home folder for zookeeper-->      
       <property>
         <name>hbase.zookeeper.property.dataDir</name>
         <value>runtime/zookeeper</value>
