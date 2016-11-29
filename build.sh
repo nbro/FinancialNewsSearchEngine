@@ -24,7 +24,6 @@ programs_required_exist() {
 	command -v awk >/dev/null 2>&1 || { echo >&2 "'awk' not installed. please, install it before proceeding."; exit 1; }
 	command -v grep >/dev/null 2>&1 || { echo >&2 "'grep' not installed. please, install it before proceeding."; exit 1; }
 	command -v xargs >/dev/null 2>&1 || { echo >&2 "'xargs' not installed. please, install it before proceeding."; exit 1; }
-
 	printf "${GREEN}ok.${NORMAL}\n\n";
 }
 

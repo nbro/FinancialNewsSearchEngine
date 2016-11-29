@@ -12,7 +12,7 @@ Software you will _absolutely_ need to download is:
 
 4. [`ant`](http://ant.apache.org/)
 
-Other software you may _eventually_ need while reading this _READAME_ are:
+Other software you may _eventually_ need, if you use the script [`./build.sh`](./build.sh):
 
 1. [`wget`](https://www.gnu.org/software/wget/)
 
@@ -26,9 +26,19 @@ Other software you may _eventually_ need while reading this _READAME_ are:
 
 6. [`pkill`](https://www.freebsd.org/cgi/man.cgi?query=pkill&sektion=1)
 
-Notice that you may have already some of these programs installed on your system. 
+7. [`kill`](https://www.freebsd.org/cgi/man.cgi?query=kill&sektion=1)
 
-If you're on a Mac OS X, you can install most of these programs using for example the package manager _Homebrew_. On Linux the package manager may be different but the process should be the same.
+8. [`lsof`](https://linux.die.net/man/8/lsof)
+
+9. [`awk`](https://en.wikipedia.org/wiki/AWK)
+
+10. [`grep`](https://www.freebsd.org/cgi/man.cgi?query=grep&sektion=&n=1)
+
+11. [`xargs`](https://www.freebsd.org/cgi/man.cgi?query=xargs&apropos=0&sektion=0&manpath=FreeBSD+10.3-RELEASE+and+Ports&arch=default&format=html)
+
+Notice that you may have already some/most of these programs installed on your system. 
+
+If you're on a Mac OS X, you can install most of these programs using for example the package manager _Homebrew_ or _port_. On Linux the package manager may be different but the process should be the same.
 
 _I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections "configuration" and "commands". This script is still not robuts but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000) You can run the script as follows:_
 
