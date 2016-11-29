@@ -336,9 +336,15 @@
     <field name="contentLength" type="string" stored="true" indexed="false"/>
     <field name="lastModified" type="date" stored="true" indexed="false"/>
     <field name="date" type="tdate" stored="true" indexed="true"/>
-    
+        
+    <!-- this field was originally (from Nutch 2.3.1) not multi-valued,
+    but a RuntimeException was being raised 
+    because apparently this should be multivalued for some documents.
+    Specifically, this was being raised the second time I generated URls,
+    parsed the documents, inserted them into the database, etc.
+    I figure this out by going to the logs of Nutch!-->
     <!-- fields for index-metadata plugin -->  
-    <dynamicField name="meta_*" type="string" stored="true" indexed="true"/>
+    <dynamicField name="meta_*" type="string" stored="true" indexed="true" multiValued="true"/>
 
     <!-- fields for languageidentifier plugin -->
     <field name="lang" type="string" stored="true" indexed="true"/>

@@ -176,6 +176,65 @@ This section describes some problems that I've faced while setting up Nutch, HBa
     
  - [http://stackoverflow.com/a/25830910/3924118](http://stackoverflow.com/a/25830910/3924118)
 
+
+### indexer.IndexingJob - SolrIndexerJob: java.lang.RuntimeException: job failed: name=apache-nutch-2.3.1.jar, jobid=job_local441025530_0001
+
+This `java.lang.RuntimeException` exception can be raised for various reasons, so the only way to really understand the problem is to go into the compiled version of Nutch (specifically in [`apache-nutch-2.3.1/runtime/local/logs/`](apache-nutch-2.3.1/runtime/local/logs/), open the current log file and check for the corresponding error.
+
+> java.lang.Exception: org.apache.solr.client.solrj.impl.HttpSolrServer$RemoteSolrException: ERROR: [doc=com.barchart.www:https/options] multiple values encountered for non multiValued field meta_keywords: 
+[equity option quotes,options quotes,option prices,options chain,option chains,options trading,
+, options trading strategy,options trading strategies,calls,puts,call and put options,options screener,equity options,option bid ask,open interest,implied volatility,option greeks,option expiration date,stock options quotes,stock options, stock options trading,call option quotes,put option quotes,Stock Options news, Stock Options articles]
+	at org.apache.hadoop.mapred.LocalJobRunner$Job.runTasks(LocalJobRunner.java:462)
+	at org.apache.hadoop.mapred.LocalJobRunner$Job.run(LocalJobRunner.java:522)
+Caused by: org.apache.solr.client.solrj.impl.HttpSolrServer$RemoteSolrException: **ERROR: [doc=com.barchart.www:https/options] multiple values encountered for non multiValued field meta_keywords**: [equity option quotes, options quotes, option prices, options chain, option chains, options trading, options trading strategy, options trading strategies, calls, puts, call and put options, options screener, equity options, option bid ask, open interest, implied volatility, option greeks, option expiration date, stock options quotes, stock options, stock options trading, call option quotes, put option quotes, Stock Options news, Stock Options articles]
+	at org.apache.solr.client.solrj.impl.HttpSolrServer.request(HttpSolrServer.java:491)
+	at org.apache.solr.client.solrj.impl.HttpSolrServer.request(HttpSolrServer.java:197)
+	at org.apache.solr.client.solrj.request.AbstractUpdateRequest.process(AbstractUpdateRequest.java:117)
+	at org.apache.solr.client.solrj.SolrServer.add(SolrServer.java:68)
+	at org.apache.solr.client.solrj.SolrServer.add(SolrServer.java:54)
+	at org.apache.nutch.indexwriter.solr.SolrIndexWriter.write(SolrIndexWriter.java:84)
+	at org.apache.nutch.indexer.IndexWriters.write(IndexWriters.java:84)
+	at org.apache.nutch.indexer.IndexerOutputFormat$1.write(IndexerOutputFormat.java:48)
+	at org.apache.nutch.indexer.IndexerOutputFormat$1.write(IndexerOutputFormat.java:43)
+	at org.apache.hadoop.mapred.MapTask$NewDirectOutputCollector.write(MapTask.java:635)
+	at org.apache.hadoop.mapreduce.task.TaskInputOutputContextImpl.write(TaskInputOutputContextImpl.java:89)
+	at org.apache.hadoop.mapreduce.lib.map.WrappedMapper$Context.write(WrappedMapper.java:112)
+	at org.apache.nutch.indexer.IndexingJob$IndexerMapper.map(IndexingJob.java:120)
+	at org.apache.nutch.indexer.IndexingJob$IndexerMapper.map(IndexingJob.java:69)
+	at org.apache.hadoop.mapreduce.Mapper.run(Mapper.java:145)
+	at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:764)
+	at org.apache.hadoop.mapred.MapTask.run(MapTask.java:340)
+	at org.apache.hadoop.mapred.LocalJobRunner$Job$MapTaskRunnable.run(LocalJobRunner.java:243)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-29 13:34:02,501 ERROR indexer.IndexingJob - SolrIndexerJob: java.lang.RuntimeException: job failed: name=apache-nutch-2.3.1.jar, jobid=job_local441025530_0001
+	at org.apache.nutch.util.NutchJob.waitForCompletion(NutchJob.java:120)
+	at org.apache.nutch.indexer.IndexingJob.run(IndexingJob.java:154)
+	at org.apache.nutch.indexer.IndexingJob.index(IndexingJob.java:176)
+	at org.apache.nutch.indexer.IndexingJob.run(IndexingJob.java:202)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+	at org.apache.nutch.indexer.IndexingJob.main(IndexingJob.java:211)
+
+
+## Bugs
+
+- When the input search has no words, all the previous documents' brief related descriptions' words are highlighted. 
+
+## Improvements Required
+
+- No query suggestion yet
+
+- No query correction
+
+- No possibility to search specific term or expression by for example wrapping it with quotes like "my specific expression to search".
+
+- Need to add the possibility to search by title and not just by content. This limitation is due to my limited knowledge of how to use Spring Data Solr.
+
+- Possibility to sort documents by title or url (for example)
+
     
 ## Authors
 

@@ -182,6 +182,34 @@ solr() {
 }
 
 
+nutch_update() {
+	cd apache-nutch-2.3.1
+
+	# change number after -topN depending on your needs
+	printf "${YELLOW}generating top 1000...${NORMAL}\n"; 
+	runtime/local/bin/nutch generate -topN 1000
+	printf "${GREEN}done.${NORMAL}\n\n";
+
+	printf "${YELLOW}fetching all webdocuments...${NORMAL}\n";
+	runtime/local/bin/nutch fetch -all
+	printf "${GREEN}done.${NORMAL}\n\n";
+
+	printf "${YELLOW}parsing all fetched webdocuments...${NORMAL}\n";
+	runtime/local/bin/nutch parse -all
+	printf "${GREEN}done.${NORMAL}\n\n";
+
+	printf "${YELLOW}updating database all...${NORMAL}\n";
+	runtime/local/bin/nutch updatedb -all
+	printf "${GREEN}done.${NORMAL}\n\n";
+
+	printf "${YELLOW}runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all${NORMAL}\n";
+	runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all	
+	printf "${GREEN}done.${NORMAL}\n\n";	
+
+	cd ..
+}
+
+
 nutch() {
 	if [ ! -d "apache-nutch-2.3.1" ]; then
 		printf "${RED}'Directory 'apache-nutch-2.3.1' should exist!${NORMAL}\n";
@@ -199,38 +227,19 @@ nutch() {
 		# fatal error: some files/configurations somewhere else where probably modified!
 		if [ ! -f "runtime/local/bin/nutch" ]; then
 			printf "${RED}'File 'runtime/local/bin/nutch' should exist!${NORMAL}\n";
+			cd ..
 		else
 			printf "${YELLOW}injecting seeds...${NORMAL}\n";
 			# trun the following 6 commands only after HBase is running
 			runtime/local/bin/nutch inject seeds
 			printf "${GREEN}done.${NORMAL}\n\n";
 
-			# change number after -topN depending on your needs
-			printf "${YELLOW}generating top 1000...${NORMAL}\n"; 
-			runtime/local/bin/nutch generate -topN 1000
-			printf "${GREEN}done.${NORMAL}\n\n";
-
-			printf "${YELLOW}fetching all webdocuments...${NORMAL}\n";
-			runtime/local/bin/nutch fetch -all
-			printf "${GREEN}done.${NORMAL}\n\n";
-
-			printf "${YELLOW}parsing all fetched webdocuments...${NORMAL}\n";
-			runtime/local/bin/nutch parse -all
-			printf "${GREEN}done.${NORMAL}\n\n";
-
-			printf "${YELLOW}updating database all...${NORMAL}\n";
-			runtime/local/bin/nutch updatedb -all
-			printf "${GREEN}done.${NORMAL}\n\n";
-
-			printf "${YELLOW}runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all${NORMAL}\n";
-			runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all	
-			printf "${GREEN}done.${NORMAL}\n\n";
+		 	# nutch_update already goes inside apache-nutch-2.3.1 and returns back to the main folder
+			cd .. 
+			nutch_update
 
 			printf "${GREEN}done.${NORMAL}\n\n";			
 		fi
-
-		cd ..
-
 	fi
 }
 
