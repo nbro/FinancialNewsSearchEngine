@@ -30,7 +30,16 @@ Notice that you may have already some of these programs installed on your system
 
 If you're on a Mac OS X, you can install most of these programs using for example the package manager _Homebrew_. On Linux the package manager may be different but the process should be the same.
 
-**I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections *configuration* and *commands*. This script is still not robuts but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000)**.
+_I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections *configuration* and *commands*. This script is still not robuts but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000) You can run the script as follows:_
+
+    source ./build.sh
+    start
+
+_You can't simply do `./build.sh`  because there's no function that's called directly, instead you have the freedom and flexibility to choose the one that you need. For example, you may just want to rebuild nutch and pass the crawled data to solr again. In that case, simply call:_
+
+    nutch
+    
+_provided that you have already executed `source ./build.sh`. Check the source code of `./build.sh` to know more about the specific functions you can call._  
 
 ## Tutorials
 
