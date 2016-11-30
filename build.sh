@@ -11,19 +11,19 @@ YELLOW=$(tput setaf 3)
 
 programs_required_exist() {
 	printf "${YELLOW}checking existance of ${RED}required${YELLOW} programs: mvn, ant, wget, tar, unzip, tor, torsocks, pkill, kill, lsof, awk, grep and xargs${NORMAL}\n"
-	command -v mvn >/dev/null 2>&1 || { echo >&2 "'maven' not installed. please, install it before proceeding."; exit 1; }
-	command -v ant >/dev/null 2>&1 || { echo >&2 "'ant' not installed. please, install it before proceeding."; exit 1; }
-	command -v wget >/dev/null 2>&1 || { echo >&2 "'wget' not installed. please, install it before proceeding."; exit 1; }
-	command -v tar >/dev/null 2>&1 || { echo >&2 "'tar' not installed. please, install it before proceeding."; exit 1; }
-	command -v unzip >/dev/null 2>&1 || { echo >&2 "'unzip' not installed. please, install it before proceeding."; exit 1; }
-	command -v tor >/dev/null 2>&1 || { echo >&2 "'tor' not installed. please, install it before proceeding."; exit 1; }
-	command -v torsocks >/dev/null 2>&1 || { echo >&2 "'torsocks' not installed. please, install it before proceeding."; exit 1; }
-	command -v pkill >/dev/null 2>&1 || { echo >&2 "'pkill' not installed. please, install it before proceeding."; exit 1; }
+	command -v mvn >/dev/null 2>&1 || { echo >&2 "'maven' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v ant >/dev/null 2>&1 || { echo >&2 "'ant' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v wget >/dev/null 2>&1 || { echo >&2 "'wget' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v tar >/dev/null 2>&1 || { echo >&2 "'tar' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v unzip >/dev/null 2>&1 || { echo >&2 "'unzip' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v tor >/dev/null 2>&1 || { echo >&2 "'tor' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v torsocks >/dev/null 2>&1 || { echo >&2 "'torsocks' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v pkill >/dev/null 2>&1 || { echo >&2 "'pkill' not installed. please, install it before proceeding."; kill -INT $$; }
 	command -v kill >/dev/null 2>&1 || { echo >&2 "'kill' not installed. please, install it before proceeding."; exit 1; }
-	command -v lsof >/dev/null 2>&1 || { echo >&2 "'lsof' not installed. please, install it before proceeding."; exit 1; }
-	command -v awk >/dev/null 2>&1 || { echo >&2 "'awk' not installed. please, install it before proceeding."; exit 1; }
-	command -v grep >/dev/null 2>&1 || { echo >&2 "'grep' not installed. please, install it before proceeding."; exit 1; }
-	command -v xargs >/dev/null 2>&1 || { echo >&2 "'xargs' not installed. please, install it before proceeding."; exit 1; }
+	command -v lsof >/dev/null 2>&1 || { echo >&2 "'lsof' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v awk >/dev/null 2>&1 || { echo >&2 "'awk' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v grep >/dev/null 2>&1 || { echo >&2 "'grep' not installed. please, install it before proceeding."; kill -INT $$; }
+	command -v xargs >/dev/null 2>&1 || { echo >&2 "'xargs' not installed. please, install it before proceeding."; kill -INT $$; }
 	printf "${GREEN}ok.${NORMAL}\n\n";
 }
 
@@ -87,22 +87,22 @@ can_download() {
 	torify wget -q --spider http://www.pirbot.com/mirrors/apache/nutch/2.3.1/apache-nutch-2.3.1-src.tar.gz
 	if [ $? -ne 0 ]; then
 	    printf "${RED}http://www.pirbot.com/mirrors/apache/nutch/2.3.1/apache-nutch-2.3.1-src.tar.gz not available according to 'wget'.\n${NORMAL}";
-	    printf "${RED}you have a few options:\n\t 1. contact the provider of this script and tell him about this problem.\n\t 2. download all files and configure the project manually (procedure which is potentially described in the README file).\n\t 3. try to find an alternative URL for the corresponding file to be downloaded and modify this script accordingly.${NORMAL}\n";
-	    exit 1;
+	    printf "${RED}Try to re-run the script with 'source ./<name_of_this_script>' and then type again 'start'. If this persists, contact the provider of this script.${NORMAL}\n";
+		kill -INT $$
 	fi
 
 	torify wget -q --spider https://archive.apache.org/dist/hbase/hbase-0.98.8/hbase-0.98.8-hadoop2-bin.tar.gz
 	if [ $? -ne 0 ]; then
 	    printf "${RED}https://archive.apache.org/dist/hbase/hbase-0.98.8/hbase-0.98.8-hadoop2-bin.tar.gz.\n${NORMAL}";
-	    printf "${RED}you have a few options:\n\t 1. contact the provider of this script and tell him about this problem.\n\t 2. download all files and configure the project manually (procedure which is potentially described in the README file).\n\t 3. try to find an alternative URL for the corresponding file to be downloaded and modify this script accordingly.${NORMAL}\n";
-	    exit 1;
+	    printf "${RED}Try to re-run the script with 'source ./<name_of_this_script>' and then type again 'start'. If this persists, contact the provider of this script.${NORMAL}\n";
+		kill -INT $$
 	fi
 
 	torify wget -q --spider https://archive.apache.org/dist/lucene/solr/4.10.3/solr-4.10.3.zip
 	if [ $? -ne 0 ]; then
 	    printf "${RED}https://archive.apache.org/dist/lucene/solr/4.10.3/solr-4.10.3.zip\n${NORMAL}";
-	    printf "${RED}you have a few options:\n\t 1. contact the provider of this script and tell him about this problem.\n\t 2. download all files and configure the project manually (procedure which is potentially described in the README file).\n\t 3. try to find an alternative URL for the corresponding file to be downloaded and modify this script accordingly.${NORMAL}\n";
-	    exit 1;
+	    printf "${RED}Try to re-run the script with 'source ./<name_of_this_script>' and then type again 'start'. If this persists, contact the provider of this script.${NORMAL}\n";
+		kill -INT $$
 	fi
 
 	printf "${GREEN}ok.${NORMAL}\n\n";
@@ -261,6 +261,7 @@ hbase() {
 		if [ ! -f "bin/start-hbase.sh" ]; then
 			printf "${RED}'File 'bin/start-hbase.sh' should exist!${NORMAL}\n";			
 		else
+			sudo pkill -f hbase
 			bin/stop-hbase.sh
 			bin/start-hbase.sh
 			printf "${GREEN}done.${NORMAL}\n\n";

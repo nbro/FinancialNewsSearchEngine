@@ -1,5 +1,44 @@
 # FinancialNewsSearchEngine
 
+
+## Introduction
+
+This is a very simple search engine web application which is somehow "specialized" in searching for financial news on the web. It's still very rudimental and far from retrieving good results, because I didn't have much time to develop and therefore to improve it. But my goal is to continue the development (especially of the missing but important features that I will mention next) of this search engine as soon as I've a little bit of time.
+
+So far it only tries to find "quite blindly" (i.e. without a certain level of "intelligence") matches (with respect to the user's query) in the _content_ of the webpages stored in the database (_Hbase_) without actually looking at the title or the URL or other characteristics of the webdocuments, such as anchor texts, language or format of the web document, etc. This is because I didn't have much time to learn how to use the API that allows the app to connect to the searching platform (i.e., Solr) and therefore how to perform more complex queries for more "expected" results.
+
+It also doesn't allow you to search for exact matches or expressions, like 
+
+> what's the meaning of "easy easy lemon squeezy?"
+ 
+On ther other hand, you can try to write 
+
+> easy easy lemon squeezy
+
+and if there's a document in the database whose contents contain that sentence, it should be able to retrieve it, although it would not be able to distinguish which document is the best for the user's needs, which (in general) can vary a lot, of course, i.e., this would be not easy to do even if I had a lot more (and even infinite?) time, lets say!
+
+More specifically, the actual algorithm right now being used for searching is very simple and dumb: given a set of words or terms ($w_1, w_2, ... , w_n$) representing a query $q_n$, it tries to find all webdocuments [previously downloaded (and parsed) by a so-called "[crawler](https://en.wikipedia.org/wiki/Web_crawler)" (in this case it was [Nutch](http://nutch.apache.org/)) and indexed (i.e., put simply, organized in a way for easy retrieval and ranking using specialized data structures such as "[inverted indices](https://en.wikipedia.org/wiki/Inverted_index)") by another program called [Solr](http://lucene.apache.org/solr/) (which under the hood uses another program called [Lucene](https://lucene.apache.org/) for indexing and searching)] which contain strings for which one or more of $w_1, w_2, ... , w_n$ are either a substring, partial or exact match (e.g., if "eco" was a term $w_i$ in the query $q_n$, then documents with words "economic" or "economy" would also be retrieved), ignoring any case sensitivity, i.e., "hello" would be the same as "hELLo".
+
+I've not customized the indexing process of Solr (because of lack of time, of course). Moreover I didn't go much into the details of how actually Solr works, which approaches or data structures it uses, etc.
+
+So, regarding the searching process there's much to improve in this application! Check the `TODOs` section below for more details of features I would like to add to this SE.
+
+Regarding the presentation of the results, a nice feature that's already implemented is the highlighting of the matches in the contents of the webdocuments in the result snippets (not in the title or in the URL). Other useful features that could improve the user experience are "query suggestion" and "query correction", which I also want to implement!
+Right now the UI is very simple, but this was also my goal, even though, for example, I could have added other optional features which are very related to financial news, like displaying stock markets, etc.
+
+
+### Why Nutch, HBase and Solr?
+
+I've decided to use Nutch version 2 because I was interested in having some flexibility in the choice of the data storage and to have some abstraction with respect to the crawling phase. Thus I also had to make a choice of the database: I chose Hbase mostly for it's strong connection with Nutch 2. These choice of course brough some tedious consequences, because I had to build Nutch from the source code.
+
+Instead of using _Lucene_  directly and having full freedom to design my app I decided to opt for the more "concrete" search platform _Solr_, which is built on top of Lucene and can run on the most used and famous Java servlet containers, such as _Jetty_ or _Tomcat_. More specifically, since I decided to use _SpringBoot_ as the web framework to develop the backend of my search web app (on top of Tomcat), I used the _Spring Data Solr_, which is a tool/library that provides already a few nice features to query _Solr_ and thus provides another level of abstraction with respect to _Solr_, even though it's of course quite connected to it. These are one of the most interesting SpringBoot's features which ease a lot the query phase to a database, so why shouldn't I use it?
+
+Regarding the configuration of Nutch and Solr, in particular the configuration of the _schema_, e.g. the configuration of the fields for each crawled and indexed document, I decided not mess much with it and to basically copy the `apache-nutch-2.3.1/conf/schema.xml` file to the only Solr's core or collection (since they must be the same or at least compatible, lets say) that I'm using, that is `solr-4.10.3/example/solr/collection1/conf/`.
+
+I used Angular JS and Bootstrap to develop the simple front-end interface, because  I wanted to get more into Angular JS and because I had already some knowledge of Bootstrap.
+
+## Setup
+
 All of the following commands and explanations assume that you're on a unix-like system and that you have `Java` and `maven` installed. Currently I'm using `Java 1.8.0_40` and `Apache Maven 3.3.9`. If you're on Windows and you're stuck, feel free to <a href="mailto:nelson.brochado@outlook.com">contact me</a>.
 
 Software you will _absolutely_ need to download is:
@@ -40,7 +79,23 @@ Notice that you may have already some/most of these programs installed on your s
 
 If you're on a Mac OS X, you can install most of these programs using for example the package manager _Homebrew_ or _port_. On Linux the package manager may be different but the process should be the same.
 
-_I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections "configuration" and "commands". This script is still not robuts but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000) You can run the script as follows:_
+_I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections `configuration` and `commands`. This script is still not robust, but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000).
+
+Before that though you still need to add the following lines to your `/etc/hosts` file (as explained in the first tutorial mentioned below):
+
+    ##
+    # Host Database
+    #
+    # localhost is used to configure the loopback interface
+    # when the system is booting.  Do not change this entry.
+    ##
+    127.0.0.1       localhost.localdomain localhost LMC-032857
+    ::1             ip6-localhost ip6-loopback
+    fe80::1%lo0     ip6-localhost ip6-loopback
+
+And you should also export the home folder of your JavaVM. Check the mentioned tutorial for more info.
+
+After that, you can run the script as follows:
 
     source ./build.sh
     start
@@ -50,6 +105,7 @@ _You can't simply do `./build.sh`  because there's no function that's called dir
     nutch
     
 _provided that you have already executed `source ./build.sh`. Check the source code of `./build.sh` to know more about the specific functions you can call._  
+
 
 ## Tutorials
 
@@ -80,6 +136,23 @@ Before running the web app, you first need to download [`apache-nutch-2.3.1`](ht
 Once you have those 3 programs, you should replace the files that you find in [`configuration/`](configuration) for each of the programs above with their corresponding original version. If you don't do this, "you will probably not be able to run anything"... Note that I've left the structure of the folders the same as the original, but I kept only the required folders and files.
 
 ## Commands
+
+Please, do the following, first of all:
+
+Update your `/etc/hosts` file with:
+
+    ##
+    # Host Database
+    #
+    # localhost is used to configure the loopback interface
+    # when the system is booting.  Do not change this entry.
+    ##
+    127.0.0.1       localhost.localdomain localhost LMC-032857
+    ::1             ip6-localhost ip6-loopback
+    fe80::1%lo0     ip6-localhost ip6-loopback
+    
+and export the home folder of your JavaVM. Check the first tutorial above, if you have any problems in doing one of these.
+
 
 ### Nutch, HBase and Solr 
 
@@ -157,20 +230,11 @@ If you want to run this app from _Intellij IDEA_, you could have problems becaus
 After the execution of the command `mvn spring-boot:run`, go to your favourite browser and type the following URL:
 
     localhost:3000
-        
-## Approach and Design
 
-I've decided to use Nutch version 2 because, as I explained above, I was interested in having some flexibility in the choice of the data storage and to have some abstraction with respect to the crawling phase. Thus I also had to make a choice of the database: I chose Hbase mostly for it's strong connection with Nutch 2. These choice of course brough some tedious consequences, because I had to build Nutch from the source code.
 
-Instead of using _Lucene_ directly and having full freedom to design my app I decided to opt for the more "concrete" search platform _Solr_, which is built on top of Lucene and can run on the most used and famous Java servlet containers, such as _Jetty_ or _Tomcat_. More specifically, since I decided to use _SpringBoot_ as the web framework to develop the backend of my search web app (on top of Tomcat), I used the _Spring Data Solr_, which is a tool/library that provides already a few nice features to query _Solr_ and thus provides another level of abstraction with respect to _Solr_, even though it's of course quite connected to it. These are one of the most interesting SpringBoot's features which ease a lot the query phase to a database, so why shouldn't I use it?
+## Errors and Exceptions
 
-Regarding the configuration of Nutch and Solr, in particular the configuration of the _schema_, e.g. the configuration of the fields for each crawled and indexed document, I decided not mess much with it and to basically copy the `apache-nutch-2.3.1/conf/schema.xml` file to the only Solr's core or collection (since they must be the same or at least compatible, lets say) that I'm using, that is `solr-4.10.3/example/solr/collection1/conf/`.
-
-I used Angular JS and Bootstrap to develop the simple front-end interface, because  I wanted to get more into Angular JS and because I had already some knowledge of Bootstrap.
-
-## Problems
-
-This section describes some problems that I've faced while setting up Nutch, HBase, Solr, etc. In general, I found the documentation lacking of many details and updates. I encountered many problems especially when trying to combine the tools because explanations are outdated or misleading. 
+This section describes some errors and exceptions that I've faced while setting up Nutch, HBase, Solr, etc. In general, I found the documentation lacking of many details and updates. I encountered many problems especially when trying to combine the tools because explanations are outdated or misleading. 
 
 ### java.lang.ClassNotFoundException: org.apache.gora.hbase.store.HBaseStore
     
@@ -218,17 +282,24 @@ Caused by: org.apache.solr.client.solrj.impl.HttpSolrServer$RemoteSolrException:
 	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
 	at org.apache.nutch.indexer.IndexingJob.main(IndexingJob.java:211)
 
-## Improvements Required
+### Infinite wait when injecting seeds (either with script or manually)
 
-- No query suggestion yet
+This problem is probably due to a connection problem to the database _hbase_ or because the database was not started correctly... My advice is to restart whatever you were doing (i.e., call again `start`). The process should delete the database and create another one...
 
-- No query correction
 
-- No possibility to search specific term or expression by for example wrapping it with quotes like "my specific expression to search".
+## TODOs
 
-- Need to add the possibility to search by title and not just by content. This limitation is due to my limited knowledge of how to use Spring Data Solr.
+- Query suggestion
+
+- Query correction
+
+- Possibility to query for exact expression 
+
+- Customize the searching process to be more "financial news-oriented".
 
 - Possibility to sort documents by title or url (for example)
+
+- ...
 
     
 ## Authors
