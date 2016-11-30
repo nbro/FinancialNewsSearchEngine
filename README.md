@@ -218,11 +218,6 @@ Caused by: org.apache.solr.client.solrj.impl.HttpSolrServer$RemoteSolrException:
 	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
 	at org.apache.nutch.indexer.IndexingJob.main(IndexingJob.java:211)
 
-
-## Bugs
-
-- When the input search has no words, all the previous documents' brief related descriptions' words are highlighted. 
-
 ## Improvements Required
 
 - No query suggestion yet

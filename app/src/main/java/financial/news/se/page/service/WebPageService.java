@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,30 +27,32 @@ public class WebPageService {
 
     public HighlightPage<WebPageDocument> processQuery(Map<String, String> bodyData, Pageable pageable) {
 
-        if (bodyData == null || bodyData.isEmpty()) {
+        if (bodyData == null || bodyData.get("query") == null) {
             return null;
         }
 
         String q = bodyData.get("query").trim();
+
+        if (q.isEmpty()) {
+            return null;
+        }
+
         List<String> query = splitQuery(q);
 
-        /* this is only to prevent query with an empty query*/
         if (query.isEmpty()) {
             return null;
         }
 
-        System.out.println("Query: " + query);
+        System.out.println("query: " + query);
 
         return repository.findByContentContainingIgnoreCase(query, pageable);
     }
 
     private List<String> splitQuery(String query) {
-        List<String> rawQueryList = Arrays.asList(query.split(" "));
+        List<String> rawQueryList = new ArrayList<>(Arrays.asList(query.split(" ")));
 
-        try {
-            rawQueryList.removeAll(Arrays.asList("", null));
-        } catch (UnsupportedOperationException e) {
-        }
+        // rawQueryList is mutable because I wrapped the result of Arrays.asList in an ArrayList
+        rawQueryList.removeIf(item -> item == null || "".equals(item));
 
         return rawQueryList;
     }

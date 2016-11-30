@@ -20,6 +20,7 @@ public interface WebPageDocumentRepository extends SolrCrudRepository<WebPageDoc
 
     @Highlight(prefix = "<mark>", postfix = "</mark>")
     HighlightPage<WebPageDocument> findByTitleContainingIgnoreCase(List<String> query, Pageable pageable);
+
 }
 
 

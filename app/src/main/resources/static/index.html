@@ -53,8 +53,9 @@
                            ng-model="query">
                 </div>
 
-                <h6 ng-if="highlightPages.content.length > 0">Documents found:
-                    <span>{{highlightPages.content.length}}</span></h6>
+                <h6 ng-if="highlightPages.content.length > 0">
+                    <span ng-bind="'Documents found: ' + (highlightPages.content.length)"></span>
+                </h6>
 
             </div>
         </div>
@@ -66,9 +67,9 @@
 
                 <div class="col-sm-12 col-md-12 col-lg-12">
 
-                    <h3 ng-if="e.title.length > 0">{{e.title[0]}}</h3>
+                    <h3 ng-if="e.title.length > 0" ng-bind="e.title[0]"></h3>
 
-                    <h6><a href="{{e.url}}">{{e.url}}</a></h6>
+                    <h6><a href="{{e.url}}" bg-bind="e.url"></a></h6>
 
                     <div class="row" ng-repeat="h in highlightPages.highlighted[$index].highlights">
 

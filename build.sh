@@ -183,11 +183,14 @@ solr() {
 
 
 nutch_update() {
+
 	cd apache-nutch-2.3.1
 
+	TOPN=${1:-100}
+
 	# change number after -topN depending on your needs
-	printf "${YELLOW}generating top 1000...${NORMAL}\n"; 
-	runtime/local/bin/nutch generate -topN 1000
+	printf "${YELLOW}generating top $TOPN...${NORMAL}\n"; 
+	runtime/local/bin/nutch generate -topN $TOPN
 	printf "${GREEN}done.${NORMAL}\n\n";
 
 	printf "${YELLOW}fetching all webdocuments...${NORMAL}\n";
@@ -198,7 +201,7 @@ nutch_update() {
 	runtime/local/bin/nutch parse -all
 	printf "${GREEN}done.${NORMAL}\n\n";
 
-	printf "${YELLOW}updating database all...${NORMAL}\n";
+	printf "${YELLOW}updating database...${NORMAL}\n";
 	runtime/local/bin/nutch updatedb -all
 	printf "${GREEN}done.${NORMAL}\n\n";
 
