@@ -12,6 +12,7 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.SimpleTermsQuery;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.core.query.result.SolrResultPage;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

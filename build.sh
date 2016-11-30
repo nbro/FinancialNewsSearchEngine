@@ -186,12 +186,16 @@ nutch_update() {
 
 	cd apache-nutch-2.3.1
 
-	TOPN=${1:-100}
+	TOPN=${1:-1000}
 
-	printf "${YELLOW}injecting seeds...${NORMAL}\n";
-	# trun the following 6 commands only after HBase is running
-	runtime/local/bin/nutch inject seeds
-	printf "${GREEN}done.${NORMAL}\n\n";
+	INJECT=${2:-true}
+	
+	if [ $INJECT = true ]; then
+		printf "${YELLOW}injecting seeds...${NORMAL}\n";
+		# trun the following 6 commands only after HBase is running
+		runtime/local/bin/nutch inject seeds
+		printf "${GREEN}done.${NORMAL}\n\n";
+	fi
 
 	# change number after -topN depending on your needs
 	printf "${YELLOW}generating top $TOPN...${NORMAL}\n"; 

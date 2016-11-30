@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.SolrCrudRepository;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

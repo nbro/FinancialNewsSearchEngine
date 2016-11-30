@@ -41,5 +41,5 @@ class SolrConfig {
         return new SolrTemplate(solrClient(env.getProperty("solr.host")));
     }
 
-
 }
+
