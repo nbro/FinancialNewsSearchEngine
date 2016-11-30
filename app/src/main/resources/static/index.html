@@ -69,7 +69,7 @@
 
                     <h3 ng-if="e.title.length > 0" ng-bind="e.title[0]"></h3>
 
-                    <h6><a href="{{e.url}}" bg-bind="e.url"></a></h6>
+                    <h6><a href="{{e.url}}" ng-bind="e.url"></a></h6>
 
                     <div class="row" ng-repeat="h in highlightPages.highlighted[$index].highlights">
 

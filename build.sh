@@ -188,6 +188,11 @@ nutch_update() {
 
 	TOPN=${1:-100}
 
+	printf "${YELLOW}injecting seeds...${NORMAL}\n";
+	# trun the following 6 commands only after HBase is running
+	runtime/local/bin/nutch inject seeds
+	printf "${GREEN}done.${NORMAL}\n\n";
+
 	# change number after -topN depending on your needs
 	printf "${YELLOW}generating top $TOPN...${NORMAL}\n"; 
 	runtime/local/bin/nutch generate -topN $TOPN
@@ -232,15 +237,9 @@ nutch() {
 			printf "${RED}'File 'runtime/local/bin/nutch' should exist!${NORMAL}\n";
 			cd ..
 		else
-			printf "${YELLOW}injecting seeds...${NORMAL}\n";
-			# trun the following 6 commands only after HBase is running
-			runtime/local/bin/nutch inject seeds
-			printf "${GREEN}done.${NORMAL}\n\n";
-
 		 	# nutch_update already goes inside apache-nutch-2.3.1 and returns back to the main folder
 			cd .. 
 			nutch_update
-
 			printf "${GREEN}done.${NORMAL}\n\n";			
 		fi
 	fi
