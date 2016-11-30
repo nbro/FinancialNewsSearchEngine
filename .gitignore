@@ -7,5 +7,6 @@ COMMANDS.md
 
 **/.DS_Store
 **.log
+*.html
 
 !/hbase-0.98.8-hadoop2/runtime/

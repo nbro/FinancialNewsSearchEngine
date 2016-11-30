@@ -87,21 +87,21 @@ can_download() {
 	torify wget -q --spider http://www.pirbot.com/mirrors/apache/nutch/2.3.1/apache-nutch-2.3.1-src.tar.gz
 	if [ $? -ne 0 ]; then
 	    printf "${RED}http://www.pirbot.com/mirrors/apache/nutch/2.3.1/apache-nutch-2.3.1-src.tar.gz not available according to 'wget'.\n${NORMAL}";
-	    printf "${RED}Try to re-run the script with 'source ./<name_of_this_script>' and then type again 'start'. If this persists, contact the provider of this script.${NORMAL}\n";
+	    printf "${RED}Try to run at least one more time this script (with 'source ./<name_of_this_script>' and then type again 'start').\nIf this persists, contact the provider of this script.${NORMAL}\n";
 		kill -INT $$
 	fi
 
 	torify wget -q --spider https://archive.apache.org/dist/hbase/hbase-0.98.8/hbase-0.98.8-hadoop2-bin.tar.gz
 	if [ $? -ne 0 ]; then
 	    printf "${RED}https://archive.apache.org/dist/hbase/hbase-0.98.8/hbase-0.98.8-hadoop2-bin.tar.gz.\n${NORMAL}";
-	    printf "${RED}Try to re-run the script with 'source ./<name_of_this_script>' and then type again 'start'. If this persists, contact the provider of this script.${NORMAL}\n";
+	    printf "${RED}Try to run at least one more time this script (with 'source ./<name_of_this_script>' and then type again 'start').\nIf this persists, contact the provider of this script.${NORMAL}\n";
 		kill -INT $$
 	fi
 
 	torify wget -q --spider https://archive.apache.org/dist/lucene/solr/4.10.3/solr-4.10.3.zip
 	if [ $? -ne 0 ]; then
 	    printf "${RED}https://archive.apache.org/dist/lucene/solr/4.10.3/solr-4.10.3.zip\n${NORMAL}";
-	    printf "${RED}Try to re-run the script with 'source ./<name_of_this_script>' and then type again 'start'. If this persists, contact the provider of this script.${NORMAL}\n";
+	    printf "${RED}Try to run at least one more time this script (with 'source ./<name_of_this_script>' and then type again 'start').\nIf this persists, contact the provider of this script.${NORMAL}\n";
 		kill -INT $$
 	fi
 
@@ -183,6 +183,7 @@ solr() {
 
 
 nutch_update() {
+	printf "${YELLOW}starting nutch process...${NORMAL}\n";
 
 	cd apache-nutch-2.3.1
 
@@ -218,6 +219,8 @@ nutch_update() {
 	runtime/local/bin/nutch solrindex http://localhost:8983/solr/ -all	
 	printf "${GREEN}done.${NORMAL}\n\n";	
 
+	printf "${GREEN}done.${NORMAL}\n\n";	
+
 	cd ..
 }
 
@@ -243,7 +246,11 @@ nutch() {
 		else
 		 	# nutch_update already goes inside apache-nutch-2.3.1 and returns back to the main folder
 			cd .. 
+
 			nutch_update
+			
+			nutch_update
+
 			printf "${GREEN}done.${NORMAL}\n\n";			
 		fi
 	fi

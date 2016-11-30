@@ -1,11 +1,10 @@
-# FinancialNewsSearchEngine
-
+# [FinancialNewsSearchEngine](https://github.com/nbro/FinancialNewsSearchEngine)
 
 ## Introduction
 
 This is a very simple search engine web application which is somehow "specialized" in searching for financial news on the web. It's still very rudimental and far from retrieving good results, because I didn't have much time to develop and therefore to improve it. But my goal is to continue the development (especially of the missing but important features that I will mention next) of this search engine as soon as I've a little bit of time.
 
-So far it only tries to find "quite blindly" (i.e. without a certain level of "intelligence") matches (with respect to the user's query) in the _content_ of the webpages stored in the database (_Hbase_) without actually looking at the title or the URL or other characteristics of the webdocuments, such as anchor texts, language or format of the web document, etc. This is because I didn't have much time to learn how to use the API that allows the app to connect to the searching platform (i.e., Solr) and therefore how to perform more complex queries for more "expected" results.
+So far it only tries to find "quite blindly" (i.e. without a certain level of "intelligence") matches (with respect to the user's query) in the _content_ of the webpages stored in the database ([_Hbase_](https://hbase.apache.org/)) without actually looking at the title or the URL or other characteristics of the webdocuments, such as anchor texts, language or format of the web document, etc. This is because I didn't have much time to learn how to use the API (i.e., [_Spring Data Solr_](http://projects.spring.io/spring-data-solr/)) that allows the app to connect to the searching platform (i.e., [_Solr_](http://lucene.apache.org/solr/)) and therefore how to perform more complex queries for more "expected" results.
 
 It also doesn't allow you to search for exact matches or expressions, like 
 
@@ -15,15 +14,17 @@ On ther other hand, you can try to write
 
 > easy easy lemon squeezy
 
-and if there's a document in the database whose contents contain that sentence, it should be able to retrieve it, although it would not be able to distinguish which document is the best for the user's needs, which (in general) can vary a lot, of course, i.e., this would be not easy to do even if I had a lot more (and even infinite?) time, lets say!
+and if there's a document in the database whose contents contain that sentence, it should be able to retrieve it, although it would not be able to distinguish very well which document is the best for the user's needs, which can vary a lot, of course. In general, this would be not easy to do even if I had a lot more time.
 
-More specifically, the actual algorithm right now being used for searching is very simple and dumb: given a set of words or terms ($w_1, w_2, ... , w_n$) representing a query $q_n$, it tries to find all webdocuments [previously downloaded (and parsed) by a so-called "[crawler](https://en.wikipedia.org/wiki/Web_crawler)" (in this case it was [Nutch](http://nutch.apache.org/)) and indexed (i.e., put simply, organized in a way for easy retrieval and ranking using specialized data structures such as "[inverted indices](https://en.wikipedia.org/wiki/Inverted_index)") by another program called [Solr](http://lucene.apache.org/solr/) (which under the hood uses another program called [Lucene](https://lucene.apache.org/) for indexing and searching)] which contain strings for which one or more of $w_1, w_2, ... , w_n$ are either a substring, partial or exact match (e.g., if "eco" was a term $w_i$ in the query $q_n$, then documents with words "economic" or "economy" would also be retrieved), ignoring any case sensitivity, i.e., "hello" would be the same as "hELLo".
+More specifically, the actual algorithm right now being used for searching is very simple and dumb. Given a set of words or terms ($w_1, w_2, ... , w_n$) representing a query $q_n$, it tries to find all web documents which contain strings for which one or more of $w_1, w_2, ... , w_n$ are either a substring, partial or exact match. For example, if `"eco"` was a term $w_i$ in the query $q_n$, then documents with words `"eco"`, `"economic"` or `"economy"` would also be retrieved), ignoring any case sensitivity, i.e., `"economic"` would be the same as `"ECOnoMIC"`.
 
-I've not customized the indexing process of Solr (because of lack of time, of course). Moreover I didn't go much into the details of how actually Solr works, which approaches or data structures it uses, etc.
+These documents were previously downloaded (and parsed) by a so-called [_crawler_](https://en.wikipedia.org/wiki/Web_crawler) (in this case it was [Nutch](http://nutch.apache.org/)) and indexed (i.e., put simply, organized in a way for easy retrieval and ranking using specialized data structures such as [_inverted indices_](https://en.wikipedia.org/wiki/Inverted_index)) by _Solr_, which under the hood uses another program called [_Lucene_](https://lucene.apache.org/) for indexing and searching.
+
+I've not customized the indexing process of Solr (because of lack of time, of course). Moreover I didn't go much into the details of how actually Solr works, which exact approaches or data structures it uses, etc. I'm only aware of the fact that _Lucene_ uses a [vector space model](https://en.wikipedia.org/wiki/Vector_space_model) and a [boolean model](https://en.wikipedia.org/wiki/Standard_Boolean_model) to determine how relevant a given document is to a user's query, as it's explained [here](https://lucene.apache.org/core/2_9_4/scoring.html).
 
 So, regarding the searching process there's much to improve in this application! Check the `TODOs` section below for more details of features I would like to add to this SE.
 
-Regarding the presentation of the results, a nice feature that's already implemented is the highlighting of the matches in the contents of the webdocuments in the result snippets (not in the title or in the URL). Other useful features that could improve the user experience are "query suggestion" and "query correction", which I also want to implement!
+Regarding the presentation of the results, a nice feature that's already implemented is the highlighting of the matches in the contents of the web documents in the result snippets (not in the title or in the URL). Other useful features that could improve the user experience are _query suggestion_ and _query correction_, which I also want to implement.
 Right now the UI is very simple, but this was also my goal, even though, for example, I could have added other optional features which are very related to financial news, like displaying stock markets, etc.
 
 
@@ -75,13 +76,16 @@ Other software you may _eventually_ need, if you use the script [`./build.sh`](.
 
 11. [`xargs`](https://www.freebsd.org/cgi/man.cgi?query=xargs&apropos=0&sektion=0&manpath=FreeBSD+10.3-RELEASE+and+Ports&arch=default&format=html)
 
-Notice that you may have already some/most of these programs installed on your system. 
+Notice that you may have already most of these programs installed on your system. 
 
 If you're on a Mac OS X, you can install most of these programs using for example the package manager _Homebrew_ or _port_. On Linux the package manager may be different but the process should be the same.
 
-_I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections `configuration` and `commands`. This script is still not robust, but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000).
+### [`build.sh`](./build.sh)
 
-Before that though you still need to add the following lines to your `/etc/hosts` file (as explained in the first tutorial mentioned below):
+
+I've created a script [`build.sh`](./build.sh) which basically automates the tasks described in the sections `configuration` and `commands`. This script is still not robust, but in theory could avoid you to read the sections I've just mentioned and simply acess the web app at [http://127.0.0.1:3000](http://127.0.0.1:3000).
+
+Before that though you may need to add the following lines to your `/etc/hosts` file (as explained in the [first tutorial](https://wiki.apache.org/nutch/NutchTutorial) mentioned below):
 
     ##
     # Host Database
@@ -100,11 +104,13 @@ After that, you can run the script as follows:
     source ./build.sh
     start
 
-_You can't simply do `./build.sh`  because there's no function that's called directly, instead you have the freedom and flexibility to choose the one that you need. For example, you may just want to rebuild nutch and pass the crawled data to solr again. In that case, simply call:_
+You can't simply do `./build.sh`  because there's no function that's called directly, instead you have the freedom and flexibility to choose the one that you need. For example, you may just want to rebuild Nutch and pass the crawled data to Solr again. In that case, simply call:
 
     nutch
     
-_provided that you have already executed `source ./build.sh`. Check the source code of `./build.sh` to know more about the specific functions you can call._  
+provided that you have already executed `source ./build.sh`. Check the source code of `./build.sh` to know more about the specific functions you can call.
+
+**Note:after the script finishes, you may want to crawl web documents. In that case, simply call the function `nutch_update` by passing as first parameter the value for `-topN` and as second parameter `true` or `false` depending if you want correspondingly to inject the seeds or not again.**
 
 
 ## Tutorials
@@ -139,7 +145,7 @@ Once you have those 3 programs, you should replace the files that you find in [`
 
 Please, do the following, first of all:
 
-Update your `/etc/hosts` file with:
+Add the to your `/etc/hosts` file the following lines:
 
     ##
     # Host Database
@@ -151,12 +157,12 @@ Update your `/etc/hosts` file with:
     ::1             ip6-localhost ip6-loopback
     fe80::1%lo0     ip6-localhost ip6-loopback
     
-and export the home folder of your JavaVM. Check the first tutorial above, if you have any problems in doing one of these.
+and _export the home folder of your JavaVM_. Check the [first tutorial](https://wiki.apache.org/nutch/NutchTutorial) above, if you have any problems in doing one of these.
 
 
 ### Nutch, HBase and Solr 
 
-If you have already replaced the files I've mentioned in the section "configuration", then, in theory, you're able to build nutch from the source code. Before that, make sure you have [`ant`](http://ant.apache.org/) installed on your operating system. If you're on a Mac OS X and you have `Homebrew` installed, you can simply do `brew install ant`.
+If you have already replaced the files I've mentioned in the section `configuration`, then, in theory, you're able to build nutch from the source code. Before that, make sure you have [`ant`](http://ant.apache.org/) installed on your operating system. If you're on a Mac OS X and you have `Homebrew` installed, you can simply do `brew install ant`.
 
 Once you have `ant` installed, you can build nutch with the following commands:
 
@@ -289,7 +295,7 @@ This problem is probably due to a connection problem to the database _hbase_ or 
 
 ## TODOs
 
-- Query suggestion
+- Query suggestions
 
 - Query correction
 
